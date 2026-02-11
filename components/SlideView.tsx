@@ -1,7 +1,8 @@
+'use client';
 
 import React, { useState } from 'react';
 import { SlideContent, UserConfig } from '../types';
-import { refineSlide, generateComicImage } from '../services/geminiService';
+import { refineSlide, generateComicImage } from '../services/clientService';
 
 interface SlideViewProps {
   slides: SlideContent[];
@@ -132,20 +133,43 @@ export const SlideView: React.FC<SlideViewProps> = ({ slides, config, onUpdateSl
     setIsExporting(false);
   };
 
-  const exportPPT = () => {
-    // @ts-ignore
-    let pptx = new PptxGenJS();
-    pptx.layout = config.aspectRatio === '16:9' ? 'LAYOUT_16x9' : 'LAYOUT_4x3';
-    const slideW = 10;
-    const slideH = config.aspectRatio === '16:9' ? 5.625 : 7.5;
+  // 动态加载 PptxGenJS CDN
+  const loadPptxGenJS = (): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      // @ts-ignore
+      if (window.PptxGenJS) {
+        resolve();
+        return;
+      }
+      const script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js';
+      script.onload = () => resolve();
+      script.onerror = () => reject(new Error('Failed to load PptxGenJS'));
+      document.head.appendChild(script);
+    });
+  };
 
-    slides.forEach((slide, index) => {
-      let master = pptx.addSlide();
-      const primary = theme.primary.replace('#', '');
-      const secondary = theme.secondary.replace('#', '');
-      const margin = 0.5;
-      
-      master.addShape(pptx.ShapeType.rect, { x: 0, y: 0, w: '100%', h: 0.1, fill: { color: primary } });
+  const exportPPT = async () => {
+    try {
+      setIsExporting(true);
+      setShowExportModal(false);
+
+      // 动态加载 CDN
+      await loadPptxGenJS();
+      // @ts-ignore
+      const pptx = new window.PptxGenJS();
+      pptx.layout = config.aspectRatio === '16:9' ? 'LAYOUT_16x9' : 'LAYOUT_4x3';
+      const slideW = 10;
+      const slideH = config.aspectRatio === '16:9' ? 5.625 : 7.5;
+
+      slides.forEach((slide, index) => {
+        let master = pptx.addSlide();
+        const primary = theme.primary.replace('#', '');
+        const secondary = theme.secondary.replace('#', '');
+        const margin = 0.5;
+
+        // Top colored bar
+        master.addShape('rect', { x: 0, y: 0, w: '100%', h: 0.1, fill: { color: primary } });
 
       // 1. 全宽标题区
       master.addText(slide.titleEn, { 
@@ -165,7 +189,7 @@ export const SlideView: React.FC<SlideViewProps> = ({ slides, config, onUpdateSl
       const descZhY = contentY + descEnH + 0.3; // 增加间距防止重叠
 
       // 左侧装饰竖线，需覆盖所有描述
-      master.addShape(pptx.ShapeType.rect, { x: margin, y: contentY, w: 0.05, h: 1.6, fill: { color: primary } });
+      master.addShape('rect', { x: margin, y: contentY, w: 0.05, h: 1.6, fill: { color: primary } });
       
       master.addText(slide.descriptionEn, { 
         x: margin + 0.2, y: contentY, w: leftW - 0.4, h: descEnH,
@@ -181,9 +205,9 @@ export const SlideView: React.FC<SlideViewProps> = ({ slides, config, onUpdateSl
       if (slide.keyPoints) {
         const kpY = 4.0; // 往下移
         const kpH = 0.8;
-        master.addShape(pptx.ShapeType.rect, { 
-            x: margin, y: kpY, w: leftW - 0.4, h: kpH, 
-            fill: { color: primary }, radius: 5 
+        master.addShape('rect', {
+            x: margin, y: kpY, w: leftW - 0.4, h: kpH,
+            fill: { color: primary }
         });
         slide.keyPoints.slice(0, 4).forEach((kp, i) => {
           const row = Math.floor(i / 2);
@@ -210,10 +234,17 @@ export const SlideView: React.FC<SlideViewProps> = ({ slides, config, onUpdateSl
       master.addText(`${index + 1} | Source: ${slide.sourceInfo || 'Internal Document'}`, { 
         x: margin, y: slideH - 0.35, w: slideW - 1, fontSize: 7, color: 'CBD5E1', bold: true
       });
-    });
+      });
 
-    pptx.writeFile({ fileName: `LightDraft_v4_${Date.now()}.pptx` });
-    setShowExportModal(false);
+      // Write the file
+      await pptx.writeFile({ fileName: `LightDraft_${Date.now()}.pptx` });
+      setIsExporting(false);
+    } catch (error) {
+      console.error('PPT Export Error:', error);
+      alert('导出PPT失败，请重试');
+      setIsExporting(false);
+      setShowExportModal(false);
+    }
   };
 
   return (

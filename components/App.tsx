@@ -1,10 +1,11 @@
+'use client';
 
 import React, { useState } from 'react';
-import { Layout } from './components/Layout';
-import { Uploader } from './components/Uploader';
-import { SlideView } from './components/SlideView';
-import { AppState, SlideContent, AnalysisInput } from './types';
-import { analyzeContent, generateComicImage } from './services/geminiService';
+import { Layout } from './Layout';
+import { Uploader } from './Uploader';
+import { SlideView } from './SlideView';
+import { AppState, SlideContent, AnalysisInput } from '../types';
+import { analyzeContent, generateComicImage } from '../services/clientService';
 
 const App: React.FC = () => {
   const [state, setState] = useState<AppState>({
@@ -28,30 +29,42 @@ const App: React.FC = () => {
     setState(prev => ({ ...prev, status: 'generating_images', imageProgress: { current: 0, total } }));
 
     const updatedSlides = [...slides];
-    
-    // 增加重试次数到3次，防止网络波动导致最后几页缺失
+    const DELAY_BETWEEN_IMAGES = 15000; // 15秒间隔，确保不超过 5次/分钟 限制
+
     for (let i = 0; i < total; i++) {
       let success = false;
       let attempts = 0;
-      
+
+      // 第一张之后，每张图片前等待
+      if (i > 0) {
+        console.log(`Waiting ${DELAY_BETWEEN_IMAGES/1000}s before generating image ${i + 1}/${total}...`);
+        await new Promise(r => setTimeout(r, DELAY_BETWEEN_IMAGES));
+      }
+
       while (!success && attempts < 3) {
         try {
           const url = await generateComicImage(updatedSlides[i].imagePrompt, state.config);
-          if (url && url.length > 100) { // 检查有效性
+          if (url && url.length > 100) {
             updatedSlides[i] = { ...updatedSlides[i], imageUrl: url };
             success = true;
           } else {
-              throw new Error("Empty image data");
+            throw new Error("Empty image data");
           }
-        } catch (e) {
+        } catch (e: any) {
           attempts++;
-          console.warn(`Attempt ${attempts} failed for slide ${i}. Retrying...`);
-          if (attempts < 3) await new Promise(r => setTimeout(r, 1500));
+          console.warn(`Attempt ${attempts} failed for slide ${i + 1}:`, e.message);
+          // 如果是 429 错误，等待更长时间
+          const isRateLimit = e.message?.includes('429') || e.message?.includes('rate limit');
+          const waitTime = isRateLimit ? 60000 : 5000;
+          if (attempts < 3) {
+            console.log(`Retrying in ${waitTime/1000}s...`);
+            await new Promise(r => setTimeout(r, waitTime));
+          }
         }
       }
 
-      setState(prev => ({ 
-        ...prev, 
+      setState(prev => ({
+        ...prev,
         imageProgress: { ...prev.imageProgress, current: i + 1 },
         slides: [...updatedSlides]
       }));
@@ -182,6 +195,11 @@ const App: React.FC = () => {
            <p className="text-slate-400 text-xs uppercase tracking-widest font-bold">
              {state.status === 'generating_images' ? `进度: ${state.imageProgress.current} / ${state.imageProgress.total}` : '请稍候'}
            </p>
+           {state.status === 'generating_images' && state.imageProgress.current < state.imageProgress.total && (
+             <p className="text-amber-500 text-[10px] mt-4 font-medium">
+               为避免 API 限制，每张图片间隔 15 秒生成
+             </p>
+           )}
         </div>
       )}
 

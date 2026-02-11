@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply box-border;
+  }
+
+  html {
+    @apply scroll-smooth;
+  }
+}
+
+@layer utilities {
+  .soft-shadow {
+    box-shadow: 0 4px 24px -6px rgba(251, 191, 36, 0.12),
+                0 12px 48px -12px rgba(245, 158, 11, 0.08);
+  }
+
+  .fade-in {
+    animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .no-print {
+    @media print {
+      display: none !important;
+    }
+  }
+}

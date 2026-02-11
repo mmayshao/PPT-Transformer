@@ -2,7 +2,7 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { SlideContent, UserConfig, AnalysisInput } from "../types";
 
-const getAI = () => new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+const getAI = () => new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
 
 export const analyzeContent = async (input: AnalysisInput, config: UserConfig): Promise<SlideContent[]> => {
   const ai = getAI();
