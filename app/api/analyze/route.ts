@@ -19,7 +19,9 @@ export async function POST(request: NextRequest) {
 
     const ai = new GoogleGenAI({ apiKey });
 
-    const stylePrompts = {
+    type StyleKey = 'apple' | 'internet' | 'magazine' | 'datavis' | 'oilpainting' | 'custom';
+
+    const stylePrompts: Record<StyleKey, string> = {
       apple: "Minimalist, high-end white space, San Francisco type aesthetic, product-launch style.",
       internet: "Modern tech company corporate report style, professional blue accents, clean grids.",
       magazine: "Bold typography, editorial layout, high contrast, artistic branding photography.",
@@ -28,15 +30,18 @@ export async function POST(request: NextRequest) {
       custom: config.customStylePrompt || "Professional and clean."
     };
 
+    const styleKey = (config.style as StyleKey) || 'apple';
+    const selectedStyle = stylePrompts[styleKey] || stylePrompts.apple;
+
     const systemInstruction = `
       You are a world-class Presentation Strategist.
       Synthesize the provided content into exactly ${config.pageCount} slides.
-      Style: ${stylePrompts[config.style]}
+      Style: ${selectedStyle}
 
       CRITICAL RULES:
       1. Bilingual Output (English/Chinese).
       2. Extract concise metric-based "keyPoints" (3-4 items max).
-      3. Provide a vivid "imagePrompt" matching the ${config.style} style.
+      3. Provide a vivid "imagePrompt" matching the ${styleKey} style.
       4. Ensure "titleEn" is punchy (max 6 words).
       5. "descriptionEn" should be a summary, not a wall of text (max 40 words).
     `;
