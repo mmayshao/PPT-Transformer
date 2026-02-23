@@ -22,7 +22,13 @@ export async function GET(request: NextRequest) {
     console.log('[List Models] Fetching available models...');
 
     // 列出所有可用模型
-    const models = await ai.models.list();
+    const modelsPager = await ai.models.list();
+
+    // 将 Pager 转换为数组
+    const models: any[] = [];
+    for await (const model of modelsPager) {
+      models.push(model);
+    }
 
     console.log('[List Models] Available models:', models);
 
