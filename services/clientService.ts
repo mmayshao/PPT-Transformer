@@ -58,3 +58,21 @@ export const refineSlide = async (currentSlide: SlideContent, instruction: strin
   const data = await response.json();
   return data.slide;
 };
+
+export const generateOutline = async (input: AnalysisInput, config: UserConfig): Promise<string[]> => {
+  const response = await fetch('/api/generate-outline', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ input, config }),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.error || 'Failed to generate outline');
+  }
+
+  const data = await response.json();
+  return data.outline;
+};

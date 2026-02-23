@@ -33,17 +33,31 @@ export async function POST(request: NextRequest) {
     const styleKey = (config.style as StyleKey) || 'apple';
     const selectedStyle = stylePrompts[styleKey] || stylePrompts.apple;
 
+    // 语言模式指令
+    const languageInstructions: Record<string, string> = {
+      'bilingual': 'Generate both English and Chinese content for all fields (titleEn, titleZh, descriptionEn, descriptionZh). Both languages must be complete and meaningful.',
+      'english-only': 'Generate ONLY English content. Fill titleEn and descriptionEn with proper content. Leave titleZh and descriptionZh as empty strings.',
+      'chinese-only': 'Generate ONLY Chinese content. Fill titleZh and descriptionZh with proper content. Leave titleEn and descriptionEn as empty strings.',
+      'auto': 'Detect the input language automatically. If the input is primarily English, generate English-only content. If primarily Chinese, generate Chinese-only content. If mixed, generate bilingual content.'
+    };
+
+    const languageMode = config.language || 'bilingual';
+    const languageInstruction = languageInstructions[languageMode] || languageInstructions['bilingual'];
+
+    // 关键点数量配置
+    const keyPointsCount = config.keyPointsConfig?.count || 4;
+
     const systemInstruction = `
       You are a world-class Presentation Strategist.
       Synthesize the provided content into exactly ${config.pageCount} slides.
       Style: ${selectedStyle}
 
       CRITICAL RULES:
-      1. Bilingual Output (English/Chinese).
-      2. Extract concise metric-based "keyPoints" (3-4 items max).
+      1. Language Mode: ${languageInstruction}
+      2. Extract concise metric-based "keyPoints" (${keyPointsCount} items max).
       3. Provide a vivid "imagePrompt" matching the ${styleKey} style.
-      4. Ensure "titleEn" is punchy (max 6 words).
-      5. "descriptionEn" should be a summary, not a wall of text (max 40 words).
+      4. Ensure titles are punchy (max 6 words).
+      5. Descriptions should be summaries, not walls of text (max 40 words).
     `;
 
     // 构建请求内容
@@ -64,11 +78,14 @@ export async function POST(request: NextRequest) {
        }];
     }
 
-    // 模型降级策略：gemini-3-flash-preview -> gemini-2.5-flash -> gemini-2.5-flash-lite
+    // 模型降级策略：使用从 API 诊断中获取的正确模型名称（包含 models/ 前缀）
+    // 优先使用别名（latest），自动指向最新稳定版本
     const models = [
-      'gemini-3-flash-preview',
-      'gemini-2.5-flash',
-      'gemini-2.5-flash-lite'
+      'models/gemini-flash-latest',     // ✅ 别名：最新 Flash（推荐）
+      'models/gemini-2.5-flash',        // ✅ Gemini 2.5 Flash 稳定版
+      'models/gemini-pro-latest',       // ✅ 别名：最新 Pro
+      'models/gemini-2.0-flash',        // ✅ Gemini 2.0 Flash 备用
+      'models/gemini-3-flash-preview'   // ✅ Gemini 3 Flash 预览版
     ];
 
     const requestConfig = {

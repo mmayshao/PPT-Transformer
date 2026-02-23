@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -8,36 +9,100 @@ interface LayoutProps {
 
 export const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
-    <div className="min-h-screen flex flex-col items-center">
-      <header className="w-full py-8 bg-white/50 backdrop-blur-md border-b border-amber-50 no-print">
-        <div className="max-w-6xl mx-auto px-6 flex justify-between items-center">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-amber-400 rounded-full flex items-center justify-center shadow-lg shadow-amber-200">
-              <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 14h-2v-2h2v2zm0-4h-2V7h2v5z"/></svg>
-            </div>
+    <div className="min-h-screen bg-[#fafaf9]">
+      {/* Fixed Header with Backdrop Blur */}
+      <header className="fixed top-0 left-0 right-0 bg-[rgba(250,250,249,0.85)] backdrop-blur-[20px] border-b border-[#e7e5e4] z-[1000] animate-slideDown">
+        <div className="max-w-[1400px] mx-auto px-12 py-6 flex justify-between items-center">
+          {/* Left: Back to Home + Branding */}
+          <div className="flex items-center gap-8">
+            <Link
+              href="/"
+              className="flex items-center gap-2 text-sm text-[#57534e] hover:text-[#1c1917] transition-colors duration-300 no-underline group"
+            >
+              <span className="text-[#d97706] group-hover:-translate-x-1 transition-transform duration-300">←</span>
+              <span className="font-medium">Home</span>
+            </Link>
+
+            <div className="h-6 w-[1px] bg-[#e7e5e4]"></div>
+
             <div>
-              <h1 className="text-xl font-bold tracking-tight text-slate-800">
-                Light<span className="text-amber-500">Draft</span>
+              <h1 className="font-[Playfair_Display,serif] text-xl font-bold tracking-tight text-[#1c1917]">
+                PPT Crafter
               </h1>
-              <p className="text-[10px] uppercase tracking-widest text-slate-400 font-bold">AI Strategic Partner</p>
+              <p className="font-mono text-[9px] font-medium uppercase tracking-[0.12em] text-[#d97706]">
+                Transform • Create • Present
+              </p>
             </div>
           </div>
-          <div className="flex items-center gap-4">
-             <span className="text-xs text-slate-400 italic">"Making insights beautiful."</span>
+
+          {/* Right: Tagline */}
+          <div className="hidden md:block">
+            <p className="text-sm text-[#57534e] font-light italic">
+              "From documents to presentations in moments"
+            </p>
           </div>
         </div>
       </header>
-      
-      <main className="w-full max-w-6xl px-6 py-16">
+
+      {/* Main Content Area */}
+      <main className="pt-32 pb-24 w-full px-6 animate-fadeInUp" style={{ animationDelay: '0.2s' }}>
         {children}
       </main>
-      
-      <footer className="w-full py-12 text-center no-print">
-        <div className="w-12 h-0.5 bg-amber-200 mx-auto mb-6"></div>
-        <p className="text-slate-400 text-xs font-medium tracking-wide">
-          Crafted with warmth by AI Studio • Professional Strategy Series
-        </p>
+
+      {/* Minimal Footer */}
+      <footer className="border-t border-[#e7e5e4] py-12 text-center no-print">
+        <div className="max-w-[1400px] mx-auto">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <div className="w-16 h-[1px] bg-[#e7e5e4]"></div>
+            <span className="font-mono text-[10px] tracking-[0.15em] uppercase text-[#d97706]">
+              Maygent Studio
+            </span>
+            <div className="w-16 h-[1px] bg-[#e7e5e4]"></div>
+          </div>
+          <p className="font-mono text-xs tracking-[0.05em] text-[#a8a29e]">
+            PPT Crafter © 2024 — Built with Claude & Flux
+          </p>
+        </div>
       </footer>
+
+      {/* Animation Styles */}
+      <style jsx>{`
+        @keyframes slideDown {
+          from {
+            transform: translateY(-100%);
+            opacity: 0;
+          }
+          to {
+            transform: translateY(0);
+            opacity: 1;
+          }
+        }
+
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .animate-slideDown {
+          animation: slideDown 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .animate-fadeInUp {
+          animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) both;
+        }
+
+        @media print {
+          header, footer {
+            display: none !important;
+          }
+        }
+      `}</style>
     </div>
   );
 };

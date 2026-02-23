@@ -1,0 +1,110 @@
+[
+  {
+    "id": "1",
+    "source": "OpenAI",
+    "title": "GPT-5 Capabilities Expand with New Multimodal Features",
+    "excerpt": "OpenAI announces significant improvements in reasoning and context understanding, enabling more sophisticated interactions across text, image, and audio modalities.",
+    "url": "https://openai.com/blog",
+    "publishedAt": "2024-02-23T10:00:00Z",
+    "category": "Model Release"
+  },
+  {
+    "id": "2",
+    "source": "Anthropic",
+    "title": "Claude 3.5 Sonnet Sets New Benchmarks in Code Generation",
+    "excerpt": "Latest model achieves 96% accuracy on SWE-bench, surpassing previous records and demonstrating exceptional ability to understand and generate production-quality code.",
+    "url": "https://anthropic.com/news",
+    "publishedAt": "2024-02-23T05:00:00Z",
+    "category": "Model Release"
+  },
+  {
+    "id": "3",
+    "source": "DeepSeek",
+    "title": "Open-Source LLM Achieves Competitive Performance at Lower Cost",
+    "excerpt": "DeepSeek's latest release demonstrates enterprise-grade capabilities with significantly reduced computational requirements, making advanced AI more accessible.",
+    "url": "https://deepseek.com",
+    "publishedAt": "2024-02-22T14:00:00Z",
+    "category": "Research"
+  },
+  {
+    "id": "4",
+    "source": "Meta",
+    "title": "Llama 4 Architecture Reveals Novel Training Approaches",
+    "excerpt": "Meta's research team publishes findings on scaling laws and efficiency improvements, demonstrating 40% reduction in training costs while maintaining performance.",
+    "url": "https://ai.meta.com",
+    "publishedAt": "2024-02-21T09:00:00Z",
+    "category": "Research"
+  },
+  {
+    "id": "5",
+    "source": "Grok",
+    "title": "xAI Releases Grok-2 with Real-Time Information Processing",
+    "excerpt": "Integration with X platform enables unprecedented access to real-time data streams, creating new possibilities for time-sensitive AI applications.",
+    "url": "https://x.ai",
+    "publishedAt": "2024-02-21T16:00:00Z",
+    "category": "Product"
+  },
+  {
+    "id": "6",
+    "source": "Zhipu",
+    "title": "GLM-4 Advances Chinese Language Understanding",
+    "excerpt": "New architecture shows significant improvements in Chinese NLP tasks, achieving state-of-the-art results on CLUE benchmark with 94.2% accuracy.",
+    "url": "https://zhipuai.cn",
+    "publishedAt": "2024-02-20T11:00:00Z",
+    "category": "Model Release"
+  },
+  {
+    "id": "7",
+    "source": "MiniMax",
+    "title": "Multimodal AI Platform Launches Commercial API",
+    "excerpt": "MiniMax opens enterprise access to its text-to-video and text-to-speech capabilities, targeting creative industries and content production workflows.",
+    "url": "https://minimax.chat",
+    "publishedAt": "2024-02-20T08:00:00Z",
+    "category": "Product"
+  },
+  {
+    "id": "8",
+    "source": "Kimi",
+    "title": "Long-Context Model Processes 200K Tokens Efficiently",
+    "excerpt": "Moonshot AI's Kimi demonstrates breakthrough in handling ultra-long contexts, enabling analysis of entire books and large codebases in single prompts.",
+    "url": "https://kimi.moonshot.cn",
+    "publishedAt": "2024-02-19T13:00:00Z",
+    "category": "Model Release"
+  },
+  {
+    "id": "9",
+    "source": "Doubao",
+    "title": "ByteDance AI Achieves Parity with Leading Models",
+    "excerpt": "Internal benchmarks show Doubao matching GPT-4 performance on reasoning tasks while offering significantly faster inference speeds for production deployments.",
+    "url": "https://doubao.com",
+    "publishedAt": "2024-02-19T10:00:00Z",
+    "category": "Research"
+  },
+  {
+    "id": "10",
+    "source": "Qwen",
+    "title": "Alibaba Releases Qwen-2.5 with Enhanced Reasoning",
+    "excerpt": "Latest iteration shows 35% improvement in mathematical reasoning and code generation tasks, with special optimizations for enterprise applications.",
+    "url": "https://qwenlm.github.io",
+    "publishedAt": "2024-02-18T15:00:00Z",
+    "category": "Model Release"
+  },
+  {
+    "id": "11",
+    "source": "Yuanbao",
+    "title": "Tencent Unveils Industry-Specific AI Solutions",
+    "excerpt": "Yuanbao platform launches vertical AI models for finance, healthcare, and education sectors, trained on domain-specific data with enhanced compliance features.",
+    "url": "https://yuanbao.tencent.com",
+    "publishedAt": "2024-02-18T07:00:00Z",
+    "category": "Product"
+  },
+  {
+    "id": "12",
+    "source": "OpenAI",
+    "title": "DALL-E 4 Introduces Photorealistic Video Generation",
+    "excerpt": "New capabilities extend beyond image generation to high-quality video synthesis, with improved temporal consistency and style control.",
+    "url": "https://openai.com/dall-e-4",
+    "publishedAt": "2024-02-17T12:00:00Z",
+    "category": "Product"
+  }
+]

@@ -2,6 +2,8 @@ import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  // 启用 standalone 输出用于 Docker 部署
+  output: 'standalone',
   // 允许较大的body size用于PDF上传
   serverRuntimeConfig: {
     maxBodySize: '20mb',

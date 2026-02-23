@@ -3,7 +3,7 @@ import Script from 'next/script';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'LightDraft - AI Strategic Partner',
+  title: 'PPT Crafter - Maygent Studio',
   description: 'Transform documents into beautiful presentations with AI',
 };
 
