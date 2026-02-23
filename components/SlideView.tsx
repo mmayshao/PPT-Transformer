@@ -587,14 +587,48 @@ export const SlideView: React.FC<SlideViewProps> = ({ slides, config, onUpdateSl
       </div>
 
       {showExportModal && (
-        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[100] flex items-center justify-center p-6 no-print">
-           <div className="bg-white rounded-[3.5rem] p-12 max-w-sm w-full text-center fade-in shadow-2xl">
-              <h3 className="text-2xl font-bold mb-8 text-slate-800 tracking-tight">导出至本地</h3>
-              <div className="space-y-4">
-                 <button onClick={exportPPT} className="w-full py-6 bg-amber-50 border-2 border-amber-100 rounded-2xl font-black text-amber-700 hover:bg-amber-100 transition-all">POWERPOINT (.pptx)</button>
-                 <button onClick={exportPDF} className="w-full py-6 bg-slate-50 border-2 border-slate-100 rounded-2xl font-black text-slate-600 hover:bg-slate-100 transition-all">PDF DOCUMENT (.pdf)</button>
+        <div className="fixed inset-0 bg-[rgba(28,25,23,0.7)] backdrop-blur-xl z-[100] flex items-start justify-center pt-32 p-6 no-print animate-fadeIn">
+           <div className="bg-white rounded-sm border border-[#e7e5e4] p-10 max-w-md w-full text-center shadow-[0_20px_60px_rgba(0,0,0,0.2)] animate-slideUp">
+              <div className="mb-6">
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-[#fef3c7] rounded-full border-2 border-[#d97706] mb-4">
+                  <svg className="w-8 h-8 text-[#d97706]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                  </svg>
+                </div>
+                <h3 className="font-[Playfair_Display,serif] text-3xl font-bold text-[#1c1917] tracking-tight">Export Presentation</h3>
+                <p className="text-sm text-[#57534e] mt-2">Choose your preferred format</p>
               </div>
-              <button onClick={() => setShowExportModal(false)} className="mt-8 text-slate-400 font-bold text-[10px] uppercase tracking-widest hover:text-slate-600">放弃导出</button>
+
+              <div className="space-y-3">
+                 <button
+                   onClick={exportPPT}
+                   className="group w-full py-5 px-6 bg-[#d97706] text-white rounded-sm font-bold text-sm uppercase tracking-[0.1em] hover:bg-[#b45309] transition-all duration-300 shadow-[0_10px_30px_rgba(217,119,6,0.3)] hover:shadow-[0_15px_40px_rgba(217,119,6,0.4)] hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-between"
+                 >
+                   <span className="flex-1">PowerPoint</span>
+                   <span className="text-xs opacity-70">.pptx</span>
+                   <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                   </svg>
+                 </button>
+
+                 <button
+                   onClick={exportPDF}
+                   className="group w-full py-5 px-6 bg-white border-2 border-[#e7e5e4] text-[#1c1917] rounded-sm font-bold text-sm uppercase tracking-[0.1em] hover:border-[#d97706] hover:bg-[#fafaf9] transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-between"
+                 >
+                   <span className="flex-1">PDF Document</span>
+                   <span className="text-xs text-[#a8a29e]">.pdf</span>
+                   <svg className="w-5 h-5 ml-2 text-[#d97706] group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                   </svg>
+                 </button>
+              </div>
+
+              <button
+                onClick={() => setShowExportModal(false)}
+                className="mt-6 text-[#a8a29e] font-medium text-xs uppercase tracking-[0.15em] hover:text-[#1c1917] transition-colors"
+              >
+                Cancel
+              </button>
            </div>
         </div>
       )}
